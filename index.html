@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardrewards — Smarter Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ─── RESET & BASE ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  :root {
+    --cream:    #F5F0E8;
+    --cream2:   #EDE7D9;
+    --cream3:   #E4DDD0;
+    --white:    #FDFAF5;
+    --green:    #1A3D2B;
+    --green2:   #2A5C40;
+    --green3:   #3D7A58;
+    --coral:    #E8613A;
+    --coral2:   #F07A55;
+    --ink:      #1C1A17;
+    --ink2:     #3A3630;
+    --muted:    #7A7468;
+    --border:   #D8D0C0;
+    --border2:  #C8BDA8;
+
+    /* spacing scale */
+    --space-xs:  8px;
+    --space-sm:  16px;
+    --space-md:  24px;
+    --space-lg:  40px;
+    --space-xl:  64px;
+    --space-2xl: 100px;
+
+    /* nav height */
+    --nav-h: 68px;
+
+    /* container */
+    --px: clamp(20px, 5vw, 64px);
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+  img { display: block; max-width: 100%; }
+
+  /* ─────────────────────────────────────────
+     NAV
+  ───────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--px);
+    height: var(--nav-h);
+    background: rgba(245,240,232,0.94);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+
+  nav.scrolled { box-shadow: 0 2px 24px rgba(26,61,43,0.06); }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+    font-weight: 700;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .logo em { font-style: italic; color: var(--coral); }
+
+  .nav-links { display: flex; gap: clamp(18px, 3vw, 36px); list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-right { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+
+  /* hamburger — mobile only */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; gap: 5px;
+    width: 36px; height: 36px;
+    background: none; border: none; cursor: pointer; padding: 6px;
+    border-radius: 4px;
+  }
+  .nav-hamburger span {
+    display: block; width: 100%; height: 1.5px;
+    background: var(--green); border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* mobile drawer */
+  .nav-drawer {
+    display: none;
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: rgba(245,240,232,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 190;
+    padding: 0;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .nav-drawer.open { max-height: 400px; }
+  .nav-drawer ul {
+    list-style: none;
+    padding: 8px 0 16px;
+  }
+  .nav-drawer ul li a {
+    display: block;
+    padding: 14px var(--px);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .nav-drawer ul li:last-child a { border-bottom: none; }
+  .nav-drawer ul li a:hover { background: var(--cream2); color: var(--green); }
+  .nav-drawer .drawer-actions {
+    padding: 12px var(--px) 16px;
+    display: flex; gap: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .nav-drawer .drawer-actions .btn-fill,
+  .nav-drawer .drawer-actions .btn-outline { flex: 1; text-align: center; }
+
+  /* ─────────────────────────────────────────
+     BUTTONS
+  ───────────────────────────────────────── */
+  .btn-outline {
+    display: inline-block;
+    padding: 9px 20px;
+    border: 1.5px solid var(--green);
+    background: transparent;
+    color: var(--green);
+    border-radius: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .btn-outline:hover { background: var(--green); color: var(--white); }
+  .btn-outline:active { transform: scale(0.98); }
+
+  .btn-fill {
+    display: inline-block;
+    padding: 9px 22px;
+    background: var(--coral);
+    color: #fff;
+    border: 1.5px solid var(--coral);
+    border-radius: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .btn-fill:hover {
+    background: var(--coral2); border-color: var(--coral2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(232,97,58,0.28);
+  }
+  .btn-fill:active { transform: translateY(0); box-shadow: none; }
+
+  /* ─────────────────────────────────────────
+     HERO
+  ───────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    padding: calc(var(--nav-h) + 40px) 0 0 var(--px);
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .hero-decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hdc-1 {
+    width: min(600px, 80vw); height: min(600px, 80vw);
+    border: 1px solid var(--border);
+    right: -100px; top: -100px;
+    opacity: 0.5;
+  }
+  .hdc-2 {
+    width: min(400px, 60vw); height: min(400px, 60vw);
+    background: var(--green);
+    right: 80px; top: 60px;
+    opacity: 0.04;
+  }
+  .hdc-3 {
+    width: 200px; height: 200px;
+    border: 1px solid var(--border2);
+    right: 200px; bottom: 120px;
+    opacity: 0.6;
+  }
+
+  .hero-left { position: relative; z-index: 1; padding-bottom: 80px; padding-right: 40px; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--coral);
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 28px; height: 1.5px;
+    background: var(--coral);
+    flex-shrink: 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 5vw, 5.2rem);
+    line-height: 1.03;
+    letter-spacing: clamp(-1px, -0.04em, -2px);
+    font-weight: 900;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: italic; color: var(--green); }
+
+  .hero-desc {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    color: var(--muted);
+    max-width: 460px;
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 12px; align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+  }
+  .hero-actions .btn-fill   { padding: 14px 32px; font-size: 0.95rem; border-radius: 5px; }
+  .hero-actions .btn-outline { padding: 14px 26px; font-size: 0.95rem; border-radius: 5px; }
+
+  .hero-stats {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    max-width: 560px;
+  }
+
+  .stat-box {
+    padding: 20px 28px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex: 1 1 120px;
+    min-width: 100px;
+  }
+  .stat-n {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .stat-n sup { font-size: 0.65em; }
+  .stat-l {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+
+  /* HERO RIGHT — card visual */
+  .hero-right {
+    position: relative; z-index: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green);
+    padding: 80px 40px;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 60px solid rgba(255,255,255,0.04);
+  }
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    border: 40px solid rgba(255,255,255,0.03);
+  }
+
+  .card-showcase {
+    position: relative;
+    width: 320px;
+    height: 480px;
+  }
+
+  .showcase-card {
+    width: 280px;
+    height: 175px;
+    border-radius: 16px;
+    position: absolute;
+    padding: 22px 24px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.4s ease;
+    cursor: pointer;
+    will-change: transform;
+  }
+
+  .sc-1 {
+    background: linear-gradient(135deg, #F5F0E8 0%, #EDE7D9 100%);
+    top: 0; left: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.30), 0 4px 12px rgba(0,0,0,0.12);
+    z-index: 3;
+  }
+  .sc-2 {
+    background: linear-gradient(135deg, #E8613A 0%, #C04020 100%);
+    top: 100px; left: 0;
+    box-shadow: 0 20px 60px rgba(232,97,58,0.4), 0 4px 12px rgba(232,97,58,0.2);
+    z-index: 2;
+  }
+  .sc-3 {
+    background: linear-gradient(135deg, #2A5C40 0%, #1A3D2B 100%);
+    top: 200px; left: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.30), 0 4px 12px rgba(0,0,0,0.12);
+    z-index: 1;
+  }
+
+  .card-showcase:hover .sc-1 { transform: translateX(-20px) translateY(-10px) rotate(-4deg); }
+  .card-showcase:hover .sc-2 { transform: translateX(10px)  translateY(-5px)  rotate(2deg); }
+  .card-showcase:hover .sc-3 { transform: translateX(-10px) translateY(5px)   rotate(-2deg); }
+
+  .sc-logo { font-family: 'Playfair Display', serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+  .sc-1 .sc-logo { color: var(--green); }
+  .sc-2 .sc-logo { color: rgba(255,255,255,0.85); }
+  .sc-3 .sc-logo { color: rgba(245,240,232,0.7); }
+
+  .sc-chip {
+    width: 30px; height: 22px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #C8A040 0%, #906000 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .sc-number { font-size: 0.75rem; letter-spacing: 3px; }
+  .sc-1 .sc-number { color: var(--muted); }
+  .sc-2 .sc-number { color: rgba(255,255,255,0.65); }
+  .sc-3 .sc-number { color: rgba(245,240,232,0.5); }
+
+  .sc-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; }
+  .sc-1 .sc-label { color: var(--muted); }
+  .sc-2 .sc-label { color: rgba(255,255,255,0.65); }
+  .sc-3 .sc-label { color: rgba(245,240,232,0.5); }
+
+  .sc-tag {
+    position: absolute;
+    right: -16px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.72rem;
+    color: var(--ink);
+    white-space: nowrap;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  }
+  .sc-tag strong { display: block; font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--green); }
+  .sct-1 { top: 20px; }
+  .sct-2 { top: 130px; }
+  .sct-3 { top: 240px; }
+
+  /* ─────────────────────────────────────────
+     COMMON SECTION STYLES
+  ───────────────────────────────────────── */
+  section { padding: var(--space-2xl) var(--px); }
+
+  .label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--coral);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .label::before { content: ''; width: 20px; height: 1.5px; background: var(--coral); flex-shrink: 0; }
+
+  .section-h {
+    font-size: clamp(1.9rem, 3.5vw, 3rem);
+    font-weight: 900;
+    letter-spacing: clamp(-0.5px, -0.03em, -1.5px);
+    line-height: 1.06;
+    color: var(--ink);
+  }
+  .section-h em { font-style: italic; color: var(--green); }
+
+  /* ─────────────────────────────────────────
+     CREDIT CARDS SECTION
+  ───────────────────────────────────────── */
+  .cards-section { background: var(--white); }
+
+  .cards-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 48px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    align-self: flex-start;
+    margin-top: 12px;
+  }
+
+  .filter-btn {
+    padding: 7px 18px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    border-radius: 100px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--green); color: var(--green); }
+  .filter-btn:active { transform: scale(0.96); }
+  .filter-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .product-tile {
+    background: var(--white);
+    padding: clamp(20px, 3vw, 36px);
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-tile::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--coral);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .product-tile:hover { background: var(--cream); }
+  .product-tile:hover::after { transform: scaleX(1); }
+
+  .tile-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .tile-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 11px;
+    border-radius: 100px;
+    line-height: 1;
+  }
+  .tb-green  { background: rgba(26,61,43,0.1);   color: var(--green); }
+  .tb-coral  { background: rgba(232,97,58,0.1);  color: var(--coral); }
+  .tb-blue   { background: rgba(42,92,180,0.1);  color: #2A5CB4; }
+  .tb-purple { background: rgba(120,42,160,0.1); color: #782AA0; }
+
+  .tile-card-art {
+    width: 100%; height: 100px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .product-tile:hover .tile-card-art { transform: translateY(-3px); }
+
+  .tca-cream { background: linear-gradient(135deg, #EDE7D9 0%, #D8D0C0 100%); border: 1px solid var(--border); }
+  .tca-green { background: linear-gradient(135deg, #1A3D2B 0%, #0D2018 100%); }
+  .tca-coral { background: linear-gradient(135deg, #E8613A 0%, #A04020 100%); }
+  .tca-blue  { background: linear-gradient(135deg, #1A2D60 0%, #0D1838 100%); }
+  .tca-teal  { background: linear-gradient(135deg, #1A4040 0%, #0D2020 100%); }
+  .tca-sand  { background: linear-gradient(135deg, #C8A860 0%, #886020 100%); }
+
+  .mini-card-face {
+    width: 85%; height: 80%;
+    border-radius: 8px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 10px 14px;
+    position: absolute;
+  }
+  .mf-logo { font-family: 'Playfair Display', serif; font-size: 0.55rem; letter-spacing: 1px; }
+  .mf-num  { font-size: 0.5rem; letter-spacing: 3px; }
+
+  .tile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .tile-rates {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .rate-v { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--green); }
+  .rate-k { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-top: 2px; }
+
+  .tile-features {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 7px;
+    margin-bottom: 24px;
+  }
+  .tile-features li {
+    font-size: 0.8rem;
+    color: var(--ink2);
+    display: flex; gap: 10px; align-items: flex-start;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+  .tile-features li::before {
+    content: '—';
+    color: var(--coral);
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+
+  .tile-cta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--green);
+    text-decoration: none;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    transition: gap 0.25s ease, color 0.2s;
+    cursor: pointer;
+    border: none; background: none;
+    font-family: 'Outfit', sans-serif;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    text-align: left;
+  }
+  .tile-cta:hover { gap: 14px; color: var(--coral); }
+
+  /* ─────────────────────────────────────────
+     LOANS
+  ───────────────────────────────────────── */
+  .loans-section { background: var(--cream2); }
+
+  .loans-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 60px);
+    margin-top: 56px;
+  }
+
+  .loan-panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(26,61,43,0.05);
+    transition: box-shadow 0.25s;
+  }
+  .loan-panel:hover { box-shadow: 0 6px 32px rgba(26,61,43,0.09); }
+
+  .loan-panel-head {
+    padding: 24px 28px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(26,61,43,0.02);
+  }
+
+  .lph-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .lph-green { background: var(--green); }
+  .lph-coral { background: var(--coral); }
+
+  .lph-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; }
+  .lph-sub   { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  .loan-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .loan-row:last-child { border-bottom: none; }
+  .loan-row:hover { background: var(--cream); }
+
+  .lr-name   { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+  .lr-detail { font-size: 0.71rem; color: var(--muted); line-height: 1.4; }
+  .lr-rate   { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--green); white-space: nowrap; }
+
+  /* ─────────────────────────────────────────
+     HOW IT WORKS
+  ───────────────────────────────────────── */
+  .how-section { background: var(--green); }
+
+  .how-section .label { color: rgba(245,240,232,0.5); }
+  .how-section .label::before { background: rgba(245,240,232,0.4); }
+  .how-section .section-h { color: var(--cream); }
+  .how-section .section-h em { font-style: italic; color: var(--coral2); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-top: 56px;
+  }
+
+  .step-cell {
+    background: var(--green);
+    padding: clamp(24px, 3vw, 40px) clamp(20px, 2.5vw, 32px);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .step-cell:hover { background: var(--green2); }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    color: rgba(245,240,232,0.06);
+    line-height: 1;
+    margin-bottom: 16px;
+    user-select: none;
+  }
+
+  .step-icon {
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 9px;
+  }
+
+  .step-desc { font-size: 0.8rem; color: rgba(245,240,232,0.52); line-height: 1.65; font-weight: 300; }
+
+  /* ─────────────────────────────────────────
+     ELIGIBILITY
+  ───────────────────────────────────────── */
+  .elig-section {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .elig-left {
+    padding: var(--space-2xl) var(--px);
+    background: var(--cream);
+    border-right: 1px solid var(--border);
+  }
+
+  .elig-right { padding: clamp(40px, 6vw, 80px) var(--px); }
+
+  .elig-perks {
+    display: flex; flex-direction: column; gap: 0;
+    margin-top: 40px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .perk-row {
+    display: flex; gap: 18px; align-items: flex-start;
+    padding: 22px 26px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .perk-row:last-child { border-bottom: none; }
+  .perk-row:hover { background: var(--cream2); }
+
+  .perk-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--coral);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 48px;
+  }
+
+  .perk-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 3px; }
+  .perk-desc  { font-size: 0.76rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+
+  /* ─── FORM ─── */
+  .form-h   { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 700; margin-bottom: 6px; }
+  .form-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 32px; }
+
+  .fg { margin-bottom: 18px; }
+  .fl {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .fi, .fs {
+    width: 100%;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 11px 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .fi:focus, .fs:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(26,61,43,0.10);
+  }
+  .fi::placeholder { color: var(--border2); }
+  .fs { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7468' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  .fs option { background: var(--white); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .range-label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .range-val-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  input[type="range"] {
+    width: 100%; appearance: none; -webkit-appearance: none;
+    height: 3px;
+    background: var(--border2); border-radius: 2px; outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    background: var(--green); border-radius: 50%; cursor: pointer;
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 1.5px var(--green);
+    transition: transform 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px; height: 18px;
+    background: var(--green); border-radius: 50%; cursor: pointer;
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 1.5px var(--green);
+  }
+
+  .btn-submit-green {
+    width: 100%; padding: 14px;
+    background: var(--green);
+    color: var(--cream);
+    border: none;
+    border-radius: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    margin-top: 6px; letter-spacing: 0.2px;
+  }
+  .btn-submit-green:hover {
+    background: var(--green2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(26,61,43,0.22);
+  }
+  .btn-submit-green:active { transform: translateY(0); box-shadow: none; }
+
+  /* ─────────────────────────────────────────
+     PARTNER SECTION
+  ───────────────────────────────────────── */
+  .partner-section { background: var(--cream2); }
+
+  .partner-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    margin-top: 56px;
+    align-items: start;
+  }
+
+  .comm-table {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--white);
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(26,61,43,0.05);
+  }
+
+  .ct-head {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    padding: 14px 22px;
+    background: var(--green);
+  }
+  .ct-h { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(245,240,232,0.6); font-weight: 600; }
+
+  .ct-row {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    padding: 15px 22px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    align-items: center;
+  }
+  .ct-row:last-child { border-bottom: none; }
+  .ct-row:hover { background: var(--cream); }
+
+  .ct-d { font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; }
+  .ct-d:first-child { color: var(--ink); font-weight: 500; }
+  .ct-payout { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700; color: var(--green); }
+
+  .partner-cta-box {
+    background: var(--coral);
+    padding: 32px 36px;
+    margin-top: 20px;
+    color: #fff;
+    border-radius: 4px;
+  }
+  .pcb-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; line-height: 1.2; }
+  .pcb-desc  { font-size: 0.85rem; opacity: 0.88; margin-bottom: 22px; font-weight: 300; line-height: 1.65; }
+  .btn-white {
+    display: inline-block;
+    padding: 12px 26px;
+    background: #fff;
+    color: var(--coral);
+    border: none;
+    border-radius: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem; font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .btn-white:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .partner-perks { display: flex; flex-direction: column; gap: 14px; }
+
+  .pp-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 22px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+  .pp-item:hover {
+    border-color: var(--green);
+    transform: translateX(5px);
+    box-shadow: 0 4px 20px rgba(26,61,43,0.08);
+  }
+
+  .pp-icon {
+    font-size: 1.2rem;
+    width: 40px; height: 40px;
+    background: rgba(26,61,43,0.08);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pp-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
+  .pp-desc  { font-size: 0.76rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+
+  /* ─────────────────────────────────────────
+     TESTIMONIALS
+  ───────────────────────────────────────── */
+  .testi-section { background: var(--white); }
+
+  .testi-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; margin-top: 52px;
+  }
+
+  .testi-tile {
+    padding: clamp(24px, 3vw, 36px);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--white);
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .testi-tile:hover {
+    border-color: var(--green);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(26,61,43,0.09);
+  }
+
+  .testi-stars { color: var(--coral); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 18px; }
+
+  .testi-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--border2);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .testi-text {
+    font-size: 0.85rem; color: var(--ink2);
+    line-height: 1.75; font-weight: 300; font-style: italic;
+    margin-bottom: 24px;
+  }
+
+  .testi-author {
+    display: flex; align-items: center; gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+  }
+
+  .t-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.82rem; font-weight: 700; color: var(--cream);
+    flex-shrink: 0;
+  }
+  .t-name { font-weight: 600; font-size: 0.85rem; }
+  .t-role { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+
+  /* ─────────────────────────────────────────
+     CTA
+  ───────────────────────────────────────── */
+  .cta-section {
+    background: var(--cream2);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; padding: 0; align-items: stretch;
+  }
+
+  .cta-left {
+    padding: var(--space-2xl) var(--px);
+    background: var(--green);
+    color: var(--cream);
+  }
+  .cta-left .label { color: rgba(245,240,232,0.5); }
+  .cta-left .label::before { background: rgba(245,240,232,0.4); }
+
+  .cta-h {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.06;
+    margin-bottom: 18px;
+  }
+  .cta-h em { font-style: italic; color: var(--coral2); }
+  .cta-p {
+    font-size: 0.9rem; opacity: 0.68; font-weight: 300;
+    line-height: 1.75; margin-bottom: 32px; max-width: 360px;
+  }
+  .cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cta-btns .btn-fill { padding: 13px 26px; }
+
+  .btn-cream {
+    display: inline-block;
+    padding: 13px 24px;
+    border: 1.5px solid rgba(245,240,232,0.35);
+    background: transparent;
+    color: var(--cream);
+    border-radius: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.875rem; font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none;
+  }
+  .btn-cream:hover { border-color: rgba(245,240,232,0.7); background: rgba(245,240,232,0.07); }
+
+  .cta-right {
+    padding: clamp(40px, 6vw, 80px) var(--px);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .quick-form-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; }
+  .quick-form-sub   { font-size: 0.8rem; color: var(--muted); margin-bottom: 24px; }
+
+  /* ─────────────────────────────────────────
+     FOOTER
+  ───────────────────────────────────────── */
+  footer {
+    background: var(--ink);
+    color: var(--cream2);
+    padding: clamp(48px, 6vw, 72px) var(--px) 36px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 52px;
+    padding-bottom: 52px;
+    border-bottom: 1px solid rgba(245,240,232,0.10);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--cream); text-decoration: none;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .footer-logo em { font-style: italic; color: var(--coral2); }
+
+  .footer-tagline {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.42);
+    line-height: 1.65;
+    max-width: 260px;
+    font-weight: 300;
+  }
+
+  .footer-col h5 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.67rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: rgba(245,240,232,0.35);
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a {
+    text-decoration: none;
+    color: rgba(245,240,232,0.55);
+    font-size: 0.83rem; font-weight: 300;
+    transition: color 0.2s;
+    display: inline-block;
+  }
+  .footer-col a:hover { color: var(--cream); }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+    font-size: 0.73rem;
+    color: rgba(245,240,232,0.32);
+    flex-wrap: wrap;
+  }
+
+  /* ─────────────────────────────────────────
+     SCROLL ANIMATIONS
+  ───────────────────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ─────────────────────────────────────────
+     RESPONSIVE — MOBILE & TABLET
+  ───────────────────────────────────────── */
+
+  /* Tablet: 768–1024px */
+  @media (max-width: 1024px) {
+    .nav-links { gap: 20px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+
+  /* Mobile: ≤768px */
+  @media (max-width: 768px) {
+    :root { --space-2xl: 64px; }
+
+    /* Nav */
+    .nav-links { display: none; }
+    .nav-right .btn-outline,
+    .nav-right .btn-fill { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-drawer { display: block; }
+
+    /* Hero */
+    .hero {
+      grid-template-columns: 1fr;
+      padding: calc(var(--nav-h) + 32px) var(--px) 56px;
+      min-height: auto;
+    }
+    .hero-right { display: none; }
+    .hero-left { padding-bottom: 0; padding-right: 0; }
+    .hero h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+    .hero-actions { margin-bottom: 40px; }
+    .hero-stats { flex-wrap: wrap; }
+    .stat-box { flex: 1 1 calc(50% - 1px); min-width: 120px; padding: 16px 20px; }
+
+    /* Cards */
+    .cards-section { padding: 56px var(--px); }
+    .cards-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .cards-grid { grid-template-columns: 1fr; }
+
+    /* Loans */
+    .loans-layout { grid-template-columns: 1fr; gap: 24px; }
+    .loan-panel-head { padding: 18px 20px; }
+    .loan-row { padding: 16px 20px; }
+
+    /* Steps */
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .step-cell { padding: 28px 20px; }
+
+    /* Eligibility */
+    .elig-section { grid-template-columns: 1fr; }
+    .elig-left { padding: 56px var(--px); border-right: none; border-bottom: 1px solid var(--border); }
+    .elig-right { padding: 48px var(--px); }
+    .form-row { grid-template-columns: 1fr; }
+
+    /* Partner */
+    .partner-layout { grid-template-columns: 1fr; gap: 32px; }
+
+    /* Testimonials */
+    .testi-row { grid-template-columns: 1fr; gap: 16px; }
+
+    /* CTA */
+    .cta-section { grid-template-columns: 1fr; }
+    .cta-left  { padding: 56px var(--px); }
+    .cta-right { padding: 48px var(--px); }
+
+    /* Footer */
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  }
+
+  /* Small mobile: ≤480px */
+  @media (max-width: 480px) {
+    :root { --px: 16px; }
+
+    .hero h1 { font-size: 2.1rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn-fill,
+    .hero-actions .btn-outline { text-align: center; }
+
+    .stat-box { flex: 1 1 calc(50% - 1px); padding: 14px 16px; }
+    .stat-n { font-size: 1.4rem; }
+
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-cell { border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+    .filter-row { gap: 6px; }
+    .filter-btn { padding: 6px 14px; font-size: 0.75rem; }
+
+    .tile-rates { gap: 12px; }
+
+    .footer-top { grid-template-columns: 1fr; gap: 28px; }
+    .footer-col { border-top: 1px solid rgba(245,240,232,0.08); padding-top: 24px; }
+
+    .partner-cta-box { padding: 24px 20px; }
+    .pcb-title { font-size: 1.2rem; }
+
+    .cta-btns { flex-direction: column; }
+    .cta-btns .btn-fill,
+    .cta-btns .btn-cream { text-align: center; }
+
+    .ct-head,
+    .ct-row { grid-template-columns: 1.8fr 1fr 1fr; padding: 12px 14px; }
+    .ct-d, .ct-h { font-size: 0.72rem; }
+  }
+
+  /* Focus accessibility */
+  :focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  .btn-fill:focus-visible, .btn-outline:focus-visible, .btn-submit-green:focus-visible {
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="logo">Card<em>rewards</em></a>
+  <ul class="nav-links">
+    <li><a href="#cards">Credit Cards</a></li>
+    <li><a href="#loans">Loans</a></li>
+    <li><a href="#eligibility">Check Eligibility</a></li>
+    <li><a href="#partner">Partners</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn-outline">Sign In</a>
+    <a href="#" class="btn-fill">Apply Now</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="#cards"       onclick="closeDrawer()">Credit Cards</a></li>
+    <li><a href="#loans"       onclick="closeDrawer()">Loans</a></li>
+    <li><a href="#eligibility" onclick="closeDrawer()">Check Eligibility</a></li>
+    <li><a href="#partner"     onclick="closeDrawer()">Partners</a></li>
+  </ul>
+  <div class="drawer-actions">
+    <a href="#" class="btn-outline">Sign In</a>
+    <a href="#" class="btn-fill">Apply Now</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-decor-circle hdc-1"></div>
+  <div class="hero-decor-circle hdc-2"></div>
+  <div class="hero-decor-circle hdc-3"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">India's #1 Financial Marketplace</div>
+    <h1>Finance that <em>works<br>for you,</em><br>not against you.</h1>
+    <p class="hero-desc">Credit cards with rewards that actually matter. Personal &amp; business loans in 24 hours. 94% approval rate — even with low CIBIL scores.</p>
+    <div class="hero-actions">
+      <a href="#cards" class="btn-fill">Explore Products</a>
+      <a href="#eligibility" class="btn-outline">Check My Eligibility</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-n">2.4<sup>L+</sup></div>
+        <div class="stat-l">Customers Served</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">₹800Cr<sup>+</sup></div>
+        <div class="stat-l">Total Disbursed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">94%</div>
+        <div class="stat-l">Approval Rate</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">40<sup>+</sup></div>
+        <div class="stat-l">Lending Partners</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="card-showcase">
+      <div class="showcase-card sc-1">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="sc-logo">CARDREWARDS</div>
+          <div class="sc-chip"></div>
+        </div>
+        <div class="sc-number">•••• •••• •••• 4521</div>
+        <div class="sc-label">Cashback Elite</div>
+      </div>
+      <div class="showcase-card sc-2">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="sc-logo">CARDREWARDS</div>
+          <div class="sc-chip" style="background:linear-gradient(135deg,#fff8,#fff3)"></div>
+        </div>
+        <div class="sc-number">•••• •••• •••• 8832</div>
+        <div class="sc-label">Travel Pro</div>
+      </div>
+      <div class="showcase-card sc-3">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="sc-logo">CARDREWARDS</div>
+          <div class="sc-chip"></div>
+        </div>
+        <div class="sc-number">•••• •••• •••• 1190</div>
+        <div class="sc-label">Obsidian Premium</div>
+      </div>
+      <div class="sc-tag sct-1"><strong>5%</strong>grocery cashback</div>
+      <div class="sc-tag sct-2"><strong>∞</strong>lounge visits</div>
+      <div class="sc-tag sct-3"><strong>25X</strong>reward points</div>
+    </div>
+  </div>
+</div>
+
+<!-- CREDIT CARDS -->
+<section class="cards-section" id="cards">
+  <div class="cards-header">
+    <div>
+      <div class="label">Credit Cards</div>
+      <h2 class="section-h">The card that<br><em>rewards every rupee.</em></h2>
+    </div>
+    <div>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterTiles('all',this)">All</button>
+        <button class="filter-btn" onclick="filterTiles('cashback',this)">Cashback</button>
+        <button class="filter-btn" onclick="filterTiles('travel',this)">Travel</button>
+        <button class="filter-btn" onclick="filterTiles('premium',this)">Premium</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-grid" id="cards-grid">
+    <div class="product-tile reveal" data-cat="cashback">
+      <div class="tile-top">
+        <span class="tile-badge tb-green">★ Most Popular</span>
+      </div>
+      <div class="tile-card-art tca-cream">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:var(--green)">CARDREWARDS</div>
+          <div class="mf-num" style="color:var(--muted)">•••• •••• •••• 0001</div>
+        </div>
+      </div>
+      <div class="tile-name">CashMax</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">5%</div><div class="rate-k">Grocery</div></div>
+        <div class="rate-item"><div class="rate-v">2%</div><div class="rate-k">All spends</div></div>
+        <div class="rate-item"><div class="rate-v">₹0</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>Lifetime free — no annual charges</li>
+        <li>₹500 welcome cashback on first spend</li>
+        <li>Fuel surcharge waiver nationwide</li>
+        <li>CIBIL 650+ eligible</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+
+    <div class="product-tile reveal" data-cat="travel" style="transition-delay:0.1s">
+      <div class="tile-top">
+        <span class="tile-badge tb-blue">✈ Travel</span>
+      </div>
+      <div class="tile-card-art tca-blue">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:rgba(245,240,232,0.7)">CARDREWARDS</div>
+          <div class="mf-num" style="color:rgba(245,240,232,0.4)">•••• •••• •••• 0002</div>
+        </div>
+      </div>
+      <div class="tile-name">TravelPro</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">3X</div><div class="rate-k">Travel points</div></div>
+        <div class="rate-item"><div class="rate-v">∞</div><div class="rate-k">Lounge visits</div></div>
+        <div class="rate-item"><div class="rate-v">₹2499</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>Unlimited domestic &amp; intl. lounge access</li>
+        <li>Comprehensive travel insurance cover</li>
+        <li>Zero forex markup on transactions</li>
+        <li>CIBIL 720+ required</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+
+    <div class="product-tile reveal" data-cat="premium" style="transition-delay:0.2s">
+      <div class="tile-top">
+        <span class="tile-badge tb-purple">💎 Premium</span>
+      </div>
+      <div class="tile-card-art tca-teal">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:rgba(245,240,232,0.7)">CARDREWARDS</div>
+          <div class="mf-num" style="color:rgba(245,240,232,0.4)">•••• •••• •••• 0003</div>
+        </div>
+      </div>
+      <div class="tile-name">Obsidian</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">25X</div><div class="rate-k">Luxury rewards</div></div>
+        <div class="rate-item"><div class="rate-v">5L</div><div class="rate-k">Credit limit</div></div>
+        <div class="rate-item"><div class="rate-v">₹9999</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>Dedicated 24/7 concierge service</li>
+        <li>Golf club &amp; spa access across India</li>
+        <li>Complimentary luxury hotel stays</li>
+        <li>CIBIL 780+ required</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+
+    <div class="product-tile reveal" data-cat="cashback" style="transition-delay:0.05s">
+      <div class="tile-top">
+        <span class="tile-badge tb-coral">🛒 Shopping</span>
+      </div>
+      <div class="tile-card-art tca-coral">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:rgba(255,255,255,0.7)">CARDREWARDS</div>
+          <div class="mf-num" style="color:rgba(255,255,255,0.4)">•••• •••• •••• 0004</div>
+        </div>
+      </div>
+      <div class="tile-name">ShopX</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">8%</div><div class="rate-k">Online shopping</div></div>
+        <div class="rate-item"><div class="rate-v">3%</div><div class="rate-k">All other spends</div></div>
+        <div class="rate-item"><div class="rate-v">₹299</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>8% off on Amazon, Flipkart &amp; Meesho</li>
+        <li>OTT subscription vouchers monthly</li>
+        <li>1% waived on rent payments</li>
+        <li>CIBIL 670+ eligible</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+
+    <div class="product-tile reveal" data-cat="cashback" style="transition-delay:0.15s">
+      <div class="tile-top">
+        <span class="tile-badge tb-green">🛡 Low CIBIL</span>
+      </div>
+      <div class="tile-card-art tca-sand">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:rgba(255,255,255,0.7)">CARDREWARDS</div>
+          <div class="mf-num" style="color:rgba(255,255,255,0.4)">•••• •••• •••• 0005</div>
+        </div>
+      </div>
+      <div class="tile-name">Starter</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">1%</div><div class="rate-k">All spends</div></div>
+        <div class="rate-item"><div class="rate-v">25K</div><div class="rate-k">Credit limit</div></div>
+        <div class="rate-item"><div class="rate-v">₹0</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>CIBIL 600+ eligible — rebuild credit</li>
+        <li>Monthly credit score update</li>
+        <li>No income proof needed</li>
+        <li>Secured card option available</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+
+    <div class="product-tile reveal" data-cat="travel" style="transition-delay:0.25s">
+      <div class="tile-top">
+        <span class="tile-badge tb-blue">🎁 Rewards</span>
+      </div>
+      <div class="tile-card-art tca-green">
+        <div class="mini-card-face">
+          <div class="mf-logo" style="color:rgba(245,240,232,0.7)">CARDREWARDS</div>
+          <div class="mf-num" style="color:rgba(245,240,232,0.4)">•••• •••• •••• 0006</div>
+        </div>
+      </div>
+      <div class="tile-name">Rewards Elite</div>
+      <div class="tile-rates">
+        <div class="rate-item"><div class="rate-v">10X</div><div class="rate-k">Dining &amp; travel</div></div>
+        <div class="rate-item"><div class="rate-v">4/yr</div><div class="rate-k">Lounge visits</div></div>
+        <div class="rate-item"><div class="rate-v">₹499</div><div class="rate-k">Annual fee</div></div>
+      </div>
+      <ul class="tile-features">
+        <li>10X reward points on dining &amp; travel</li>
+        <li>₹1000 welcome voucher on activation</li>
+        <li>Airport lounge access 4 times/year</li>
+        <li>CIBIL 700+ required</li>
+      </ul>
+      <button class="tile-cta">Apply Now →</button>
+    </div>
+  </div>
+</section>
+
+<!-- LOANS -->
+<section class="loans-section" id="loans">
+  <div class="label">Loans</div>
+  <h2 class="section-h">Fast money,<br><em>zero friction.</em></h2>
+  <p style="margin-top:14px;color:var(--muted);font-size:0.95rem;font-weight:300;max-width:500px;line-height:1.75">Personal and business loans disbursed in 24–48 hours. Rates starting at 10.5% p.a. Minimal documentation. 40+ lenders.</p>
+
+  <div class="loans-layout">
+    <div class="loan-panel reveal">
+      <div class="loan-panel-head">
+        <div class="lph-icon lph-green">👤</div>
+        <div>
+          <div class="lph-title">Personal Loans</div>
+          <div class="lph-sub">Disbursal from 4 hours · Up to ₹35 lakhs</div>
+        </div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">Salary Advance Loan</div><div class="lr-detail">Salary slip + Aadhaar · Part-prepayment allowed</div></div>
+        <div class="lr-rate">10.5% p.a.</div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">Personal Multipurpose</div><div class="lr-detail">Salaried/self-employed · Flexible EMI options</div></div>
+        <div class="lr-rate">12.5% p.a.</div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">Credit Builder Loan</div><div class="lr-detail">CIBIL 580+ eligible · No guarantor needed</div></div>
+        <div class="lr-rate">18% p.a.</div>
+      </div>
+    </div>
+
+    <div class="loan-panel reveal" style="transition-delay:0.15s">
+      <div class="loan-panel-head">
+        <div class="lph-icon lph-coral">🏢</div>
+        <div>
+          <div class="lph-title">Business Loans</div>
+          <div class="lph-sub">Same-day disbursal for large loans</div>
+        </div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">SME Business Loan</div><div class="lr-detail">3+ yr vintage · No collateral up to ₹50L</div></div>
+        <div class="lr-rate">13% p.a.</div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">Startup Growth Loan</div><div class="lr-detail">1+ yr vintage · Working capital · Moratorium available</div></div>
+        <div class="lr-rate">16% p.a.</div>
+      </div>
+      <div class="loan-row">
+        <div><div class="lr-name">Merchant Loan</div><div class="lr-detail">POS/UPI basis · Daily EMI · No ITR up to ₹5L</div></div>
+        <div class="lr-rate">15% p.a.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="label">Process</div>
+  <h2 class="section-h">How it <em>works.</em></h2>
+
+  <div class="steps-grid">
+    <div class="step-cell reveal">
+      <div class="step-num">01</div>
+      <span class="step-icon">✏️</span>
+      <div class="step-title">Register</div>
+      <p class="step-desc">Create your profile in under 3 minutes. PAN and Aadhaar is all you need to get started.</p>
+    </div>
+    <div class="step-cell reveal" style="transition-delay:0.1s">
+      <div class="step-num">02</div>
+      <span class="step-icon">🔍</span>
+      <div class="step-title">Get Matched</div>
+      <p class="step-desc">Our AI engine scans 40+ lenders and finds the best product for your exact credit profile.</p>
+    </div>
+    <div class="step-cell reveal" style="transition-delay:0.2s">
+      <div class="step-num">03</div>
+      <span class="step-icon">📋</span>
+      <div class="step-title">Submit Docs</div>
+      <p class="step-desc">Upload minimal documents digitally. No branch visits, no courier, no physical paperwork.</p>
+    </div>
+    <div class="step-cell reveal" style="transition-delay:0.3s">
+      <div class="step-num">04</div>
+      <span class="step-icon">⚡</span>
+      <div class="step-title">Get Funded</div>
+      <p class="step-desc">Approved within 24 hours. Money in your account within 48 hours of document submission.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ELIGIBILITY -->
+<div class="elig-section" id="eligibility">
+  <div class="elig-left">
+    <div class="label">Eligibility</div>
+    <h2 class="section-h">Know before<br><em>you apply.</em></h2>
+    <p style="margin-top:16px;color:var(--muted);font-size:0.9rem;font-weight:300;line-height:1.75;max-width:400px">Check your eligibility for free — no hard enquiry, your CIBIL score stays untouched.</p>
+
+    <div class="elig-perks">
+      <div class="perk-row">
+        <div class="perk-num">48h</div>
+        <div class="perk-text">
+          <div class="perk-title">Disbursal Guarantee</div>
+          <div class="perk-desc">From application to account credit in 48 hours or we waive processing fees.</div>
+        </div>
+      </div>
+      <div class="perk-row">
+        <div class="perk-num">40+</div>
+        <div class="perk-text">
+          <div class="perk-title">Lending Partners</div>
+          <div class="perk-desc">RBI-regulated banks and NBFCs — the widest network in India.</div>
+        </div>
+      </div>
+      <div class="perk-row">
+        <div class="perk-num">94%</div>
+        <div class="perk-text">
+          <div class="perk-title">Approval Rate</div>
+          <div class="perk-desc">Even for CIBIL scores as low as 580. We find a way.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="elig-right">
+    <div class="form-h">Check My Eligibility</div>
+    <div class="form-sub">Free check — no impact on your credit score</div>
+
+    <div class="form-row">
+      <div class="fg">
+        <label class="fl">Employment Type</label>
+        <select class="fs">
+          <option>Salaried</option>
+          <option>Self-Employed</option>
+          <option>Business Owner</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Product Needed</label>
+        <select class="fs">
+          <option>Personal Loan</option>
+          <option>Business Loan</option>
+          <option>Credit Card</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Monthly Income / Turnover (₹)</label>
+      <input class="fi" type="number" placeholder="e.g. 60,000">
+    </div>
+
+    <div class="fg">
+      <div class="range-label-row">
+        <label class="fl" style="margin:0">CIBIL Score</label>
+        <span class="range-val-display" id="cibil-v2">700</span>
+      </div>
+      <input type="range" min="300" max="900" value="700" oninput="document.getElementById('cibil-v2').textContent=this.value">
+    </div>
+
+    <div class="fg">
+      <div class="range-label-row">
+        <label class="fl" style="margin:0">Loan Amount</label>
+        <span class="range-val-display" id="amt-v2">₹5,00,000</span>
+      </div>
+      <input type="range" min="50000" max="5000000" step="50000" value="500000"
+        oninput="document.getElementById('amt-v2').textContent='₹'+Number(this.value).toLocaleString('en-IN')">
+    </div>
+
+    <div class="fg">
+      <label class="fl">City</label>
+      <input class="fi" type="text" placeholder="Your city">
+    </div>
+
+    <button class="btn-submit-green">Check Eligibility →</button>
+  </div>
+</div>
+
+<!-- PARTNER -->
+<section class="partner-section" id="partner">
+  <div class="label">Partner Program</div>
+  <h2 class="section-h">Earn up to <em>₹1.5L/month</em><br>as a Cardrewards Partner.</h2>
+  <p style="margin-top:16px;color:var(--muted);font-size:0.9rem;font-weight:300;max-width:520px;line-height:1.75">Join India's fastest-growing DSA network. No investment required. Refer customers, track leads in real time, get paid within 24 hours.</p>
+
+  <div class="partner-layout">
+    <div>
+      <div class="comm-table reveal">
+        <div class="ct-head">
+          <div class="ct-h">Product</div>
+          <div class="ct-h">Rate</div>
+          <div class="ct-h">Avg. Payout</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-d">Credit Card — Free</div>
+          <div class="ct-d">₹1,500–₹3,500</div>
+          <div class="ct-d ct-payout">₹2,500</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-d">Credit Card — Premium</div>
+          <div class="ct-d">₹3,000–₹6,000</div>
+          <div class="ct-d ct-payout">₹4,000</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-d">Personal Loan</div>
+          <div class="ct-d">0.5%–1%</div>
+          <div class="ct-d ct-payout">₹3K–₹7K</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-d">Business Loan (SME)</div>
+          <div class="ct-d">0.75%–1.5%</div>
+          <div class="ct-d ct-payout">₹10K–₹25K</div>
+        </div>
+        <div class="ct-row">
+          <div class="ct-d">Business Loan (Large)</div>
+          <div class="ct-d">1%–2%</div>
+          <div class="ct-d ct-payout">₹25K–₹1L</div>
+        </div>
+      </div>
+
+      <div class="partner-cta-box reveal" style="transition-delay:0.15s">
+        <div class="pcb-title">6,000+ Active Partners · ₹420Cr+ Paid Out</div>
+        <div class="pcb-desc">Register today and get access to the training academy, branded marketing materials, and a dedicated relationship manager from day one.</div>
+        <a href="#" class="btn-white">Register as Partner →</a>
+      </div>
+    </div>
+
+    <div class="partner-perks">
+      <div class="pp-item reveal">
+        <div class="pp-icon">📊</div>
+        <div>
+          <div class="pp-title">Real-time Dashboard</div>
+          <div class="pp-desc">Track every lead from applied to VKYC to approved. Full transparency on commissions earned.</div>
+        </div>
+      </div>
+      <div class="pp-item reveal" style="transition-delay:0.1s">
+        <div class="pp-icon">⚡</div>
+        <div>
+          <div class="pp-title">24-Hour Payouts</div>
+          <div class="pp-desc">Industry-leading payout cycle. No waiting weeks — commissions hit your account in 24–48 hours.</div>
+        </div>
+      </div>
+      <div class="pp-item reveal" style="transition-delay:0.2s">
+        <div class="pp-icon">👤</div>
+        <div>
+          <div class="pp-title">Dedicated RM Support</div>
+          <div class="pp-desc">Each partner gets a relationship manager. WhatsApp support with instant resolution.</div>
+        </div>
+      </div>
+      <div class="pp-item reveal" style="transition-delay:0.3s">
+        <div class="pp-icon">🎓</div>
+        <div>
+          <div class="pp-title">Free Training Academy</div>
+          <div class="pp-desc">Product knowledge, sales skills, objection handling — all free. Top performers get quarterly bonuses.</div>
+        </div>
+      </div>
+      <div class="pp-item reveal" style="transition-delay:0.4s">
+        <div class="pp-icon">📣</div>
+        <div>
+          <div class="pp-title">Marketing Support</div>
+          <div class="pp-desc">Branded creatives, WhatsApp templates, and digital materials provided at no cost.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="label">Testimonials</div>
+  <h2 class="section-h">Trusted by<br><em>thousands.</em></h2>
+
+  <div class="testi-row">
+    <div class="testi-tile reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-q">"</div>
+      <p class="testi-text">My credit card was approved in 18 hours. I had a CIBIL of 640 and was rejected everywhere else. Cardrewards came through when no one else would.</p>
+      <div class="testi-author">
+        <div class="t-avatar">RK</div>
+        <div><div class="t-name">Rahul Kumar</div><div class="t-role">Salaried Professional, Delhi</div></div>
+      </div>
+    </div>
+    <div class="testi-tile reveal" style="transition-delay:0.15s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-q">"</div>
+      <p class="testi-text">Took a ₹50L business loan for my textile shop. The process was smooth and the rates were genuinely competitive — much better than what my bank offered.</p>
+      <div class="testi-author">
+        <div class="t-avatar">SP</div>
+        <div><div class="t-name">Sunita Patel</div><div class="t-role">Business Owner, Surat</div></div>
+      </div>
+    </div>
+    <div class="testi-tile reveal" style="transition-delay:0.3s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-q">"</div>
+      <p class="testi-text">Joined as a DSA partner 6 months ago. Already earning ₹1.1L per month. The dashboard and training made it incredibly easy to get started.</p>
+      <div class="testi-author">
+        <div class="t-avatar">AM</div>
+        <div><div class="t-name">Arjun Mehta</div><div class="t-role">DSA Partner, Mumbai</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA + QUICK FORM -->
+<div class="cta-section">
+  <div class="cta-left">
+    <div class="label">Get Started</div>
+    <h2 class="cta-h">Ready to make your money <em>work harder?</em></h2>
+    <p class="cta-p">Apply in 5 minutes. Approved in 24 hours. No branch visit, no hidden charges, no drama.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-fill">Apply Now →</a>
+      <a href="#" class="btn-cream">Talk to an Advisor</a>
+    </div>
+  </div>
+  <div class="cta-right">
+    <div class="quick-form-title">Quick Inquiry</div>
+    <div class="quick-form-sub">Leave your details — our team will call within 2 hours.</div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Full Name</label><input class="fi" placeholder="Your name"></div>
+      <div class="fg"><label class="fl">Mobile</label><input class="fi" placeholder="10-digit number"></div>
+    </div>
+    <div class="fg">
+      <label class="fl">Product Interested In</label>
+      <select class="fs"><option>Credit Card</option><option>Personal Loan</option><option>Business Loan</option><option>Partner Program</option></select>
+    </div>
+    <div class="fg"><label class="fl">Monthly Income (₹)</label><input class="fi" placeholder="e.g. 60,000"></div>
+    <button class="btn-submit-green">Get Free Consultation →</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="#" class="footer-logo">Card<em>rewards</em></a>
+      <p class="footer-tagline">India's trusted fintech platform for credit cards, loans, and partner distribution. Designed to empower every Indian on their financial journey.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <ul>
+        <li><a href="#">Credit Cards</a></li>
+        <li><a href="#">Personal Loans</a></li>
+        <li><a href="#">Business Loans</a></li>
+        <li><a href="#">Partner Program</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Support</h5>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Grievance</a></li>
+        <li><a href="#">Terms &amp; Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Cardrewards Financial Services Pvt. Ltd. All rights reserved. NBFC Reg: SO12345</span>
+    <span>support@cardrewards.in · 1800-123-4567 · Mon–Sat, 9AM–7PM</span>
+  </div>
+</footer>
+
+<script>
+  /* ── Filter ── */
+  function filterTiles(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#cards-grid .product-tile').forEach(t => {
+      t.style.display = (cat === 'all' || t.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+
+  /* ── Scroll reveal ── */
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ── Nav scroll shadow ── */
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* ── Mobile hamburger ── */
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('nav-drawer');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = drawer.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  /* close drawer on outside click */
+  document.addEventListener('click', e => {
+    if (!nav.contains(e.target) && !drawer.contains(e.target)) closeDrawer();
+  });
+</script>
+</body>
+</html>
