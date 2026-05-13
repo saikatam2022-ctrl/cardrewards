@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & Conditions — CardRewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:  #F5F0E8;
+    --cream2: #EDE7D9;
+    --white:  #FDFAF5;
+    --green:  #1A3D2B;
+    --green2: #2A5C40;
+    --coral:  #E8613A;
+    --ink:    #1C1A17;
+    --ink2:   #3A3630;
+    --muted:  #7A7468;
+    --border: #D8D0C0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 64px; height: 68px;
+    background: rgba(245,240,232,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--green); text-decoration: none;
+  }
+  .logo em { font-style: italic; color: var(--coral); }
+  .back-link {
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--green); }
+
+  /* HERO */
+  .doc-hero {
+    background: var(--green);
+    padding: 72px 64px 60px;
+    position: relative; overflow: hidden;
+  }
+  .doc-hero::after {
+    content: '';
+    position: absolute; bottom: -80px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    border: 60px solid rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .doc-type {
+    font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 2.5px;
+    color: var(--coral); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .doc-type::before { content: ''; width: 20px; height: 1.5px; background: var(--coral); }
+  .doc-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 900; letter-spacing: -1.5px;
+    color: var(--cream); line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .doc-hero h1 em { font-style: italic; color: #F07A55; }
+  .doc-meta {
+    font-size: 0.8rem; color: rgba(245,240,232,0.45);
+    font-weight: 300;
+  }
+
+  /* LAYOUT */
+  .doc-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 64px 100px;
+  }
+
+  /* SIDEBAR TOC */
+  .toc {
+    position: sticky; top: 88px;
+    align-self: start;
+    padding: 40px 32px 40px 0;
+    border-right: 1px solid var(--border);
+    height: fit-content;
+  }
+  .toc-title {
+    font-size: 0.65rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--muted); margin-bottom: 16px;
+  }
+  .toc-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .toc-list a {
+    text-decoration: none; font-size: 0.78rem;
+    color: var(--muted); font-weight: 400;
+    padding: 5px 8px; border-radius: 4px;
+    display: block; transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .toc-list a:hover { color: var(--green); background: var(--cream2); }
+
+  /* CONTENT */
+  .doc-content { padding: 48px 0 0 48px; }
+
+  .doc-section { margin-bottom: 52px; }
+
+  .doc-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.2;
+  }
+
+  .doc-section p {
+    font-size: 0.88rem; color: var(--ink2);
+    margin-bottom: 14px; font-weight: 300;
+    line-height: 1.8;
+  }
+
+  .doc-section ul {
+    margin: 10px 0 14px 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .doc-section ul li {
+    font-size: 0.88rem; color: var(--ink2);
+    font-weight: 300; line-height: 1.7;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .doc-section ul li::before {
+    content: '—'; color: var(--coral);
+    flex-shrink: 0; font-size: 0.8rem; margin-top: 2px;
+  }
+
+  .blank-field {
+    display: inline-block;
+    background: rgba(232,97,58,0.08);
+    border: 1px dashed rgba(232,97,58,0.4);
+    border-radius: 3px;
+    padding: 1px 10px;
+    font-size: 0.8rem;
+    color: var(--coral);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    background: var(--ink);
+    padding: 40px 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .doc-footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--cream); text-decoration: none;
+  }
+  .doc-footer-logo em { font-style: italic; color: #F07A55; }
+  .doc-footer p { font-size: 0.75rem; color: rgba(245,240,232,0.35); margin-top: 4px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 0.78rem; color: rgba(245,240,232,0.45);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+
+  @media (max-width: 860px) {
+    nav { padding: 0 24px; }
+    .doc-hero { padding: 56px 24px 48px; }
+    .doc-layout { grid-template-columns: 1fr; padding: 0 24px 60px; }
+    .toc { display: none; }
+    .doc-content { padding: 36px 0 0; }
+    .doc-footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="cardrewards.html" class="logo">Card<em>rewards</em></a>
+  <a href="cardrewards.html" class="back-link">← Back to Home</a>
+</nav>
+
+<div class="doc-hero">
+  <div class="doc-type">Legal</div>
+  <h1>Terms &amp; <em>Conditions</em></h1>
+  <div class="doc-meta">Last updated: January 2026 &nbsp;·&nbsp; Effective immediately upon use of the platform</div>
+</div>
+
+<div class="doc-layout">
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#s1">1. Introduction</a></li>
+      <li><a href="#s2">2. Our Service</a></li>
+      <li><a href="#s3">3. Creating an Account</a></li>
+      <li><a href="#s4">4. Account Termination</a></li>
+      <li><a href="#s5">5. Commissions & Rewards</a></li>
+      <li><a href="#s6">6. Payments</a></li>
+      <li><a href="#s7">7. Privacy Policy</a></li>
+      <li><a href="#s8">8. Intellectual Property</a></li>
+      <li><a href="#s9">9. Our Role</a></li>
+      <li><a href="#s10">10. Unauthorised Use</a></li>
+      <li><a href="#s11">11. Liability</a></li>
+      <li><a href="#s12">12. Indemnification</a></li>
+      <li><a href="#s13">13. Modifications</a></li>
+      <li><a href="#s14">14. Inactive Accounts</a></li>
+      <li><a href="#s15">15. Miscellaneous</a></li>
+      <li><a href="#s16">16. Linking</a></li>
+      <li><a href="#s17">17. Programme Termination</a></li>
+      <li><a href="#s18">18. Virus Disclaimer</a></li>
+      <li><a href="#s19">19. Governing Law</a></li>
+      <li><a href="#s20">20. Contact</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="doc-content">
+
+    <div class="doc-section" id="s1">
+      <h2>1. Introduction</h2>
+      <p>Welcome to CardRewards. Please read these Terms and Conditions ("Agreement") carefully, as they constitute a legally binding contract between you and CardRewards governing your use of services available through <strong>cardrewards.in</strong>.</p>
+      <p>Throughout this document, "CardRewards", "we", "us", or "our" refers to the platform and its operating entity. "You" or "your" refers to any individual or entity that registers or uses our platform. By accessing or using our services, you confirm that you have read, understood, and agree to be bound by this Agreement. We reserve the right to amend these terms at any time, as described in Section 13.</p>
+    </div>
+
+    <div class="doc-section" id="s2">
+      <h2>2. Our Service</h2>
+      <p>CardRewards.in is a digital financial marketplace that connects users with credit card products, personal loans, and business financing options from regulated banking and NBFC partners. The platform allows users to explore products, submit applications, and — where applicable — refer others and earn commissions on successful product activations.</p>
+      <p>Once a referred user completes a qualifying application and the product is successfully issued or disbursed, the referring user becomes eligible for the applicable commission payout. You may contact us for further information about our services at any time.</p>
+    </div>
+
+    <div class="doc-section" id="s3">
+      <h2>3. Creating an Account</h2>
+      <p>CardRewards.in is designed exclusively for Indian residents and operates in Indian National Rupees (INR). To register, you must be a resident of India and at least 18 years of age. Only one account is permitted per individual.</p>
+      <p>For security purposes, changes to the name or email address associated with your account are not permitted after registration. You are required to provide accurate, complete, and current information at the time of registration — including your name, email address, mobile number, and any other details requested — and to keep such information updated. Your email address is our primary communication channel; please ensure you have full access to it.</p>
+      <p>Users may not run paid advertisements on any platform — including but not limited to Google, Meta, or any similar service — using CardRewards links or branding without our prior written consent.</p>
+    </div>
+
+    <div class="doc-section" id="s4">
+      <h2>4. Account Cancellation &amp; Termination</h2>
+      <p>CardRewards reserves the right to suspend or permanently terminate any account found engaging in fraudulent, abusive, manipulative, or otherwise unfair conduct. Accounts that remain inactive in accordance with Section 14 may also be closed.</p>
+      <p>Running paid promotional campaigns for CardRewards links without authorisation will result in immediate account termination. Accounts registered with invalid or non-functional email addresses may also be cancelled. We further reserve the right to refuse membership to any applicant at our sole discretion.</p>
+    </div>
+
+    <div class="doc-section" id="s5">
+      <h2>5. Commissions &amp; Rewards</h2>
+      <p>As a CardRewards user or partner, you may earn a commission when a person you referred successfully completes a product application and receives the applicable financial product or disbursement. Commissions are processed only after they have been confirmed and remitted to us by the relevant bank or lending partner.</p>
+      <p>Please note that not all applications may be tracked or qualify for a commission. This can occur due to technical issues, browser restrictions, or the lending partner's own eligibility criteria. CardRewards shall not be held liable for untracked or ineligible applications. Commissions may also be withheld or forfeited in the following circumstances:</p>
+      <ul>
+        <li>The referred application is deemed non-genuine or invalid by the lending partner.</li>
+        <li>The user was not logged in during the referral activity, resulting in an unattributed transaction.</li>
+        <li>The account associated with the commission is terminated under Section 4 or Section 14.</li>
+      </ul>
+      <p>We will make reasonable efforts to recover missing commission claims from our lending partners; however, we reserve the right to discontinue pursuing any such claim at our discretion.</p>
+    </div>
+
+    <div class="doc-section" id="s6">
+      <h2>6. Payments</h2>
+      <p>Once a qualifying application is confirmed and the corresponding commission is received from the lending partner, CardRewards will credit the applicable amount to the member's account. Initial credits are shown as "pending" and are marked "validated" once the lending partner formally confirms the transaction — a process that may take up to 90 days or more.</p>
+      <p>The final commission amount credited to your account is determined by what is reported to us by the lending partner, which may differ from the amount advertised at the time of referral. CardRewards shall not be liable for any discrepancy between expected and actual commission amounts.</p>
+      <p>We reserve the right to reclaim any commission amounts credited in error, including in cases of fraud, misuse, or non-payment by a lending partner. This applies regardless of whether the commission has already been marked as payable or paid out.</p>
+    </div>
+
+    <div class="doc-section" id="s7">
+      <h2>7. Privacy Policy</h2>
+      <p>Your use of CardRewards is also governed by our <a href="privacy.html" style="color:var(--green);font-weight:500">Privacy Policy</a>, which describes what personal data we collect, how we use it, and your rights in relation to it. By agreeing to these Terms and Conditions, you also consent to the data practices described in the Privacy Policy.</p>
+    </div>
+
+    <div class="doc-section" id="s8">
+      <h2>8. Intellectual Property</h2>
+      <p>All content, trademarks, logos, design elements, and software available on CardRewards.in are the exclusive intellectual property of CardRewards and its operating entity. No part of the platform — including its name, branding, or content — may be reproduced, redistributed, or used for commercial purposes without our prior written permission.</p>
+      <p>By submitting any content to our platform, you grant CardRewards a non-exclusive, royalty-free licence to use, reproduce, and distribute that content in connection with our services.</p>
+    </div>
+
+    <div class="doc-section" id="s9">
+      <h2>9. Our Role</h2>
+      <p>CardRewards acts solely as a marketplace and referral platform. All financial product applications are made directly with the relevant bank or NBFC partner — CardRewards is not a party to those transactions and bears no liability for the products, services, or decisions of our lending partners.</p>
+      <p>We are not responsible for the quality, legality, or availability of any financial product offered through our platform, nor for any lending partner's ability or willingness to fulfil an approved application.</p>
+    </div>
+
+    <div class="doc-section" id="s10">
+      <h2>10. Unauthorised Use</h2>
+      <p>Any unauthorised or abusive use of the platform may result in immediate account suspension or termination. Prohibited activities include but are not limited to:</p>
+      <ul>
+        <li>Submitting false, misleading, or fabricated application information to obtain commissions.</li>
+        <li>Tampering with URLs, running automated scripts, email cloaking, or crawling the website.</li>
+        <li>Posting content that is defamatory, obscene, malicious, or infringes on third-party rights.</li>
+        <li>Uploading or transmitting any malware, viruses, or code intended to disrupt platform functionality.</li>
+        <li>Using the platform to promote or advertise third-party products or services without authorisation.</li>
+      </ul>
+      <p>CardRewards reserves the right — but not the obligation — to remove any content that violates these standards. Users bear full legal responsibility for any content they submit.</p>
+    </div>
+
+    <div class="doc-section" id="s11">
+      <h2>11. Limitation of Liability</h2>
+      <p>CardRewards's liability is strictly limited to what is expressly stated in this Agreement. We shall not be held liable for any indirect, incidental, or consequential losses arising from your use of the platform, including losses resulting from user-generated content, failed or untracked applications, or communications with lending partners.</p>
+      <p>Users are solely responsible for maintaining the confidentiality of their login credentials. CardRewards shall not be liable for any unauthorised access resulting from a user's failure to secure their account.</p>
+    </div>
+
+    <div class="doc-section" id="s12">
+      <h2>12. Indemnification</h2>
+      <p>You agree to indemnify and hold CardRewards harmless from any claim, demand, liability, loss, or expense — including legal fees — arising from:</p>
+      <ul>
+        <li>Your use of the CardRewards platform.</li>
+        <li>Any breach of the terms set out in this Agreement.</li>
+        <li>Any application or transaction made through a lending partner featured on our platform.</li>
+      </ul>
+      <p>While we take reasonable care to ensure that all content on CardRewards.in is accurate and current, we accept no liability for errors, omissions, or damages resulting from reliance on platform content.</p>
+    </div>
+
+    <div class="doc-section" id="s13">
+      <h2>13. Modification of Terms</h2>
+      <p>CardRewards reserves the right to amend these Terms and Conditions at any time. Users will be notified of material changes, and updated terms will come into effect no later than 30 days from the date of notice. Continued use of the platform after the effective date constitutes acceptance of the revised terms.</p>
+    </div>
+
+    <div class="doc-section" id="s14">
+      <h2>14. Inactive Accounts</h2>
+      <p>Accounts with no activity for a continuous period of 6 months may be classified as inactive and are subject to closure. To keep your account active, simply log in at least once a month. Any pending or redeemable balance in an inactive account may be forfeited upon closure.</p>
+    </div>
+
+    <div class="doc-section" id="s15">
+      <h2>15. Miscellaneous</h2>
+      <p>Our failure to enforce any provision of this Agreement shall not constitute a waiver of our right to enforce it in the future. If any clause of this Agreement is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</p>
+    </div>
+
+    <div class="doc-section" id="s16">
+      <h2>16. Third-Party Links</h2>
+      <p>CardRewards.in may contain links to external websites. We are not responsible for the content, availability, or data practices of any third-party sites. Users should review the terms and privacy policies of any external site they visit through our platform.</p>
+    </div>
+
+    <div class="doc-section" id="s17">
+      <h2>17. Programme Termination</h2>
+      <p>CardRewards reserves the right to discontinue the referral or partner programme — in whole or in part — at any time without prior notice. In the event of programme termination, users will have 30 days from the date of notice to redeem any outstanding balance, provided the notice is sent to a valid registered email address.</p>
+    </div>
+
+    <div class="doc-section" id="s18">
+      <h2>18. Virus Disclaimer</h2>
+      <p>While we make every reasonable effort to maintain a secure and clean platform, CardRewards cannot guarantee that the website is free from viruses or malicious code. We shall not be liable for any damage to your device or data arising from the use of our platform.</p>
+    </div>
+
+    <div class="doc-section" id="s19">
+      <h2>19. Governing Law</h2>
+      <p>These Terms and Conditions are governed by and construed in accordance with the laws of India. Any disputes arising from this Agreement shall be subject to the exclusive jurisdiction of the courts at <span class="blank-field">[City — to be filled]</span>.</p>
+    </div>
+
+    <div class="doc-section" id="s20">
+      <h2>20. Contact Information</h2>
+      <p>For any queries, concerns, or notices related to these Terms and Conditions, please reach out to us via email. All formal communications under this Agreement must be made in writing via email.</p>
+      <ul>
+        <li>Email: <span class="blank-field">[support email — to be filled]</span></li>
+        <li>Registered address: <span class="blank-field">[Company registered address — to be filled]</span></li>
+        <li>Helpline: <span class="blank-field">[Phone number — to be filled]</span></li>
+      </ul>
+      <p>We will respond to all queries within 2 business days.</p>
+    </div>
+
+  </div>
+</div>
+
+<footer class="doc-footer">
+  <div>
+    <a href="cardrewards.html" class="doc-footer-logo">Card<em>rewards</em></a>
+    <p>© 2026 CardRewards Financial Services Pvt. Ltd. All rights reserved.</p>
+  </div>
+  <div class="footer-links">
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="cardrewards.html">Home</a>
+  </div>
+</footer>
+
+</body>
+</html>
